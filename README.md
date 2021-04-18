@@ -1,12 +1,10 @@
-# NotionAutomation
-2.0 version of scripting libraries to automate devCodeCamp Notion processes
+# NotionAutomations
+2.0 version of scripting libraries to automate devCodeCamp Notion processes. 
+Interfacing with Unofficial client for Notion API - https://github.com/jamalex/notion-py
 
 # Notes
 
-See examples.py for snippets of functionality.
-
-config contains initial client setup. This is ignored from GitHub for security purposes. For more information, see documentation
-for notion.py: https://github.com/jamalex/notion-py
+config contains initial client setup. This is ignored from GitHub for security purposes. 
 
 automations contains a script file for each component of platform
 
@@ -17,13 +15,35 @@ This fixes a bug where requests for pages/collections of a certain size will ret
 https://stackoverflow.com/questions/66513210/cant-get-page-title-from-notion-using-api
 
 # TO DO
-## grading.py
+## General
+    -- Error Handling
+    -- Unit Tests
+    -- Shell script for command line interface
+    -- Documentation
+
+## Clockify API Integration
+### Reporting
+    -- Pull Clockify weekly time tracking report, add avg time calcs, send to Notion as entry in Instructor Time Tracking
+    
+### Grading
+    -- Create new project in Clockify when assignment to grade is created in Notion
+### Junior Developer Standups
+    -- Create new project in Clockify when a new student is added to Active Students
+
+## Notion Automations
+### courses.py
+    -- Take in Excel course templates -> update same course in Notion
+    -- Create a duplicate of existing courses
+### activestudents.py
+### grading.py
     -- Add new grading templates for new classes
     -- Pre-load all assignments in Grading. Load with class templates and set to automatically appear a week before assignment submitted\
     -- Automatic reminders to system admins for pending grading
 
-##class_schedules.py
-    -- Create new schedules for new classes; automatically add dates for all events, accounting for holidays and weekends
+### classschedules.py
+    -- Create new schedules for new classes 
+    -- automatically add dates for all events, accounting for holidays and weekends, based on class start
 
-##onedrive
+## Wish List
     -- Scrape OneDrive account for matching lecture/user story/resource files and add to relevant courses/events
+    -- Listen for In Progress status on Notion, automatically start Clockify timer

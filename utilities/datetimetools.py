@@ -2,10 +2,11 @@ from notion.collection import NotionDate
 from datetime import datetime, timedelta
 
 # TODO: add holiday parsing logic to change course end date based on dates the school is closed outside of weekends
-# https://pypi.org/project/holidays/ -- Use this library to create
+# https://pypi.org/project/holidays/ -- Use this library to create custom holiday object to test date for class/no class
 
 
-def create_date(course_type):
+def create_cohort_date(course_type):
+    # applies a start and end date to new row in Cohort database
     user_input = input('Enter start date in format: YYYY-MM-DD')
     start = datetime.strptime(user_input, "%Y-%m-%d").date()
     days = None
