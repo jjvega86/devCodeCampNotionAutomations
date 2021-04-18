@@ -20,6 +20,7 @@ https://stackoverflow.com/questions/66513210/cant-get-page-title-from-notion-usi
     -- Unit Tests
     -- Shell script for command line interface
     -- Documentation
+    -- Refactor scripts to use user_interface functions
 
 ## Clockify API Integration
 ### Reporting

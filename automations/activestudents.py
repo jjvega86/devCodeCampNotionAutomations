@@ -1,5 +1,5 @@
 from config import settings
-from utilities import datetimetools, helpers
+from utilities import datetimetools, user_interface
 
 import pandas
 
@@ -61,7 +61,7 @@ def get_cohort():
     else:
         new_cohort = cohorts.collection.add_row()
         new_cohort.name = user_input
-        new_cohort.course_type = helpers.get_course_type()
+        new_cohort.course_type = user_interface.get_course_type()
         new_cohort.dates = datetimetools.create_cohort_date(new_cohort.course_type)
         new_cohort.status = 'In Progress'
         return new_cohort
