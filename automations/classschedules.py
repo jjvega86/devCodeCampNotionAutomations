@@ -1,5 +1,5 @@
 from config import settings
-from utilities import datetimetools
+from utilities import datetimetools, helpers
 
 """
 Add dates to class schedule
@@ -13,3 +13,8 @@ Add dates to class schedule
     4a. If the Type is Assignment, call function to add start date, end date, and assignment submitted date
     4b. If the type is any other, call function to just add date assigned
 """
+
+
+def get_schedule_to_add_dates_to():
+    return settings.client.get_collection_view(
+        'https://www.notion.so/29eb8cd9c412439f8adcf78aa0d24ea9?v=c3d0c786555f42a78124664e5d195cc5')

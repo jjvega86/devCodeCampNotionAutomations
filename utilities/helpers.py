@@ -1,3 +1,6 @@
+from config import settings
+
+
 # Generic helper functions usable in each module
 
 
