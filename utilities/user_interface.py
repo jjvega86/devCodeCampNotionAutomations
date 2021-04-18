@@ -14,10 +14,6 @@ def get_course_type():
         get_course_type()
 
 
-def get_string_input(prompt):
-    user_input = prompt(prompt)
-    return user_input
 
 
-def get_starting_date():
-    str_date = get_string_input('What date will the class start? FORMAT: <YYYY-mm-dd')
+

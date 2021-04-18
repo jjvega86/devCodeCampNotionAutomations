@@ -27,5 +27,17 @@ def get_schedule_to_add_dates_to():
 def add_dates_to_schedule():
     # get schedule collection to add dates to
     # use datetimetools function to create a Notion date for start date by passing in user interface prompt
+    # TODO: Get course type and change flow of function accordingly
     cv = get_schedule_to_add_dates_to()
-    starting_date = datetimetools.create_start_date(user_interface.get_starting_date())
+    starting_date = datetimetools.create_date()
+    active_date = starting_date
+    active_day = 1
+    for row in cv.collection.get_rows():
+        if row.day != active_day:
+            active_date = datetimetools.add_class_day_to_date(active_date)
+            notionized_date = datetimetools.create_notion_date_start(active_date)
+            row.date_assigned = notionized_date
+            active_day = row.day
+        else:
+            notionized_date = datetimetools.create_notion_date_start(active_date)
+            row.date_assigned = notionized_date

@@ -9,6 +9,4 @@ activestudents.change_standup_status_notstarted('Part-Time')
 activestudents.change_standup_status_notstarted('Full-Time')
 '''
 
-#   print(classschedules.get_schedule_to_add_dates_to())
-
-datetimetools.get_school_closed_datetime_objects()
+classschedules.add_dates_to_schedule()
