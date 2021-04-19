@@ -132,6 +132,10 @@ def create_notion_date_start(start):
     return notion_date
 
 
-def create_notion_date_start_and_end(start, end):
-    notion_date = NotionDate(start, end=end)
-    return notion_date
+def create_notion_dates_start_end_submitted(start, active_day, last_working_day):
+    end = start + timedelta(days=last_working_day-active_day)
+    assignment_submitted_date = end + timedelta(days=1)
+    assignment_start_end = NotionDate(start, end=end)
+    assignment_submitted = NotionDate(assignment_submitted_date)
+    all_date_objects = [assignment_start_end, assignment_submitted]
+    return all_date_objects

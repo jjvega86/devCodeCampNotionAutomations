@@ -9,4 +9,4 @@ activestudents.change_standup_status_notstarted('Part-Time')
 activestudents.change_standup_status_notstarted('Full-Time')
 '''
 
-classschedules.add_dates_to_schedule()
+classschedules.add_dates_to_schedule_fulltime()
