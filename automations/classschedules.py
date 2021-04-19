@@ -34,7 +34,9 @@ def add_dates_to_schedule():
     active_day = 1
     for row in cv.collection.get_rows():
         if row.day != active_day:
-            active_date = datetimetools.add_class_day_to_date(active_date)
+            while row.day != active_day:
+                active_date = datetimetools.add_class_day_to_date(active_date)
+                active_day += 1
             notionized_date = datetimetools.create_notion_date_start(active_date)
             row.date_assigned = notionized_date
             active_day = row.day

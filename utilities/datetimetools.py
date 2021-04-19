@@ -9,7 +9,8 @@ dates_school_closed = [
     "Independence Day",
     "Labor Day",
     "Thanksgiving",
-    "Christmas Day"
+    "Christmas Day",
+    # "Some Random Holiday"
 ]
 
 
@@ -25,6 +26,7 @@ def get_school_closed_datetime_objects():
     """
     current_year = datetime.now().strftime('%Y')  # Get current year
     current_holidays = holidays.UnitedStates(years=int(current_year))  # Get current year's holidays
+    current_holidays[datetime(2021, 4, 27)] = "Some Random Holiday"
     filtered_holidays = []
     for date in current_holidays.items():  # each item in current_holidays is a tuple, with the date at the 0 index and name at the 1 index
         if date[1] == "Christmas Day":
@@ -94,21 +96,34 @@ def create_date():
 
 
 def check_for_holiday(date):
+    is_holiday = False
     all_holidays = get_school_closed_datetime_objects()
-    validated_date = date
     for closed_day in all_holidays:
         if closed_day == date:
-            new_date = date + timedelta(days=1)
-            check_for_holiday(new_date)
-    return validated_date
+            is_holiday = True
+    return is_holiday
 
 
 def add_class_day_to_date(date):
-    validated_date = check_for_holiday(date)
-    if validated_date.weekday() == 4:
-        new_date = validated_date + timedelta(days=3)
-    else:
-        new_date = validated_date + timedelta(days=1)
+    # TODO: Fix bug that adds a second day to a validated holiday
+    # TODO: Fix bug that adds dates on weekends
+    # Next class day after Memorial Day should be June 1, right now it is June 2
+    not_valid = True
+    new_date = date
+    while not_valid:
+        new_date = new_date + timedelta(days=1)
+        if new_date.weekday() == 5:
+            new_date = new_date + timedelta(days=2)
+            not_valid = check_for_holiday(new_date)
+            continue
+        elif new_date.weekday() == 6:
+            new_date = new_date + timedelta(days=1)
+            not_valid = check_for_holiday(new_date)
+            continue
+        else:
+            not_valid = check_for_holiday(new_date)
+            continue
+
     return new_date
 
 
