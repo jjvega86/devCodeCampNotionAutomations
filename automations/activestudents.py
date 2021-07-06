@@ -27,16 +27,18 @@ def change_standup_status_notstarted(course_type):
             row.standup_status = "Not Started"
 
 
+# TODO: Add error handling for empty fields in CSV file
 def add_new_class_to_activestudents():
     # Uses pandas to parse CSV from Admissions into Python data structure
     # Gets the cohort information for students' class
     # Adds new row for each student and assigns properties based on parsed CSV data
 
     cv = get_active_students_collection()
-    students = pandas.read_csv(r'/Users/jjvega/Desktop/Admissions to Instruction - April 26 - FT.csv')
+    students = pandas.read_csv(r'/Users/jjvega/Desktop/Admissions to Instruction - June 28-FT.csv')
     students_list = students.to_dict(
         'records')  # creates a List of dictionary items containing key-value pairs representing column -> value
     cohort = get_cohort()
+    course_type = user_interface.get_course_type()
     for student in students_list:
         row = cv.collection.add_row()
         row.name = student["Student Name"]
@@ -45,23 +47,13 @@ def add_new_class_to_activestudents():
         row.emergency_contact_name = student["Emergency Contact Name"]
         row.admissions_notes = student["Admissions Notes"]
         row.cohort = cohort
-        row.course = cohort.course_type
+        row.course = course_type[0]
 
 
 def get_cohort():
     # takes user input to determine if cohort exists
     # if the cohort does not exist, creates new cohort and returns to calling function
     # helper function for adding new students to Active Students
-    cohorts = settings.client.get_collection_view(
-        'https://www.notion.so/fb217eba60cf4a7c9aab62f561bd5077?v=827ed92c239a4e6e9484d960b2e39a06')
-    user_input = input('What is the name of the cohort?')
-    cohort = cohorts.collection.get_rows(search=user_input)
-    if cohort:
-        return settings.client.get_block(cohort[0].id)
-    else:
-        new_cohort = cohorts.collection.add_row()
-        new_cohort.name = user_input
-        new_cohort.course_type = user_interface.get_course_type()
-        new_cohort.dates = datetimetools.create_cohort_date(new_cohort.course_type)
-        new_cohort.status = 'In Progress'
-        return new_cohort
+
+    cohort_name = input('What is the name of the cohort?')
+    return cohort_name

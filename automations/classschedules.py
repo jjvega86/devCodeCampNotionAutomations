@@ -24,26 +24,27 @@ def get_schedule_to_add_dates_to():
         'https://www.notion.so/29eb8cd9c412439f8adcf78aa0d24ea9?v=c3d0c786555f42a78124664e5d195cc5')
 
 
-def add_dates_to_schedule_fulltime():
+def add_dates_to_schedule():
     # get schedule collection to add dates to
     # use datetimetools function to create a Notion date for start date by passing in user interface prompt
-    # TODO: Get course type and change flow of function accordingly
     cv = get_schedule_to_add_dates_to()
     starting_date = datetimetools.create_date()
+    course_type = user_interface.get_course_type()[1]
     active_date = starting_date
     active_day = 1
     for row in cv.collection.get_rows():
         if row.day != active_day:
             while row.day != active_day:
-                active_date = datetimetools.add_class_day_to_date(active_date)
+                active_date = datetimetools.add_class_day_to_date(active_date, course_type)
                 active_day += 1
             notionized_date = datetimetools.create_notion_date_start(active_date)
             row.date_assigned = notionized_date
             active_day = row.day
-        elif row.Type == 'Assignment':
+        elif row.Type == 'Assignment' and row.last_working_day is not None and active_day != row.last_working_day:
             # TODO: Test Assignment date addition logic
             # TODO: Add Assignment Submit Date to all course templates
-            add_date_objects = datetimetools.create_notion_dates_start_end_submitted(active_date, active_day, row.last_working_day)
+            add_date_objects = datetimetools.create_notion_dates_start_end_submitted(active_date, active_day,
+                                                                                     row.last_working_day)
             row.date_assigned = add_date_objects[0]
             row.assignment_submit_date = add_date_objects[1]
         else:

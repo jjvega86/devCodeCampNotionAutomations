@@ -10,11 +10,11 @@ dates_school_closed = [
     "Labor Day",
     "Thanksgiving",
     "Christmas Day",
-    # "Some Random Holiday"
+    "Some Random Holiday"
 ]
 
 
-# TODO: add holiday parsing logic to change course end date based on dates the school is closed outside of weekends
+# TODO: update holidays based on Mike's feedback. See his DM in Slack
 # https://pypi.org/project/holidays/ -- Use this library to create custom holiday object to test date for class/no class
 
 def get_school_closed_datetime_objects():
@@ -26,7 +26,7 @@ def get_school_closed_datetime_objects():
     """
     current_year = datetime.now().strftime('%Y')  # Get current year
     current_holidays = holidays.UnitedStates(years=int(current_year))  # Get current year's holidays
-    current_holidays[datetime(2021, 4, 27)] = "Some Random Holiday"
+    current_holidays[datetime(2021, 7, 2)] = "Some Random Holiday"
     filtered_holidays = []
     for date in current_holidays.items():  # each item in current_holidays is a tuple, with the date at the 0 index and name at the 1 index
         if date[1] == "Christmas Day":
@@ -77,8 +77,7 @@ def add_chrismas_week_days(filtered_holidays, christmas_day):
 
 def create_cohort_date(course_type):
     # applies a start and end date to new row in Cohort database
-    user_input = input('Enter start date in format: YYYY-MM-DD')
-    start = datetime.strptime(user_input, "%Y-%m-%d").date()
+    start = create_date()
     days = None
     if course_type == 'Full Time':
         days = 91
@@ -104,15 +103,16 @@ def check_for_holiday(date):
     return is_holiday
 
 
-def add_class_day_to_date(date):
-    # TODO: Fix bug that adds a second day to a validated holiday
-    # TODO: Fix bug that adds dates on weekends
-    # Next class day after Memorial Day should be June 1, right now it is June 2
+def add_class_day_to_date(date, course_type):
     not_valid = True
     new_date = date
     while not_valid:
         new_date = new_date + timedelta(days=1)
-        if new_date.weekday() == 5:
+        if course_type == 2 and new_date.weekday() == 4:
+            new_date = new_date + timedelta(days=3)
+            not_valid = check_for_holiday(new_date)
+            continue
+        elif new_date.weekday() == 5:
             new_date = new_date + timedelta(days=2)
             not_valid = check_for_holiday(new_date)
             continue
@@ -127,15 +127,39 @@ def add_class_day_to_date(date):
     return new_date
 
 
+def validate_date(date):
+    not_valid = True
+    new_date = date
+    while not_valid:
+        # new_date = new_date + timedelta(days=1)
+        if new_date.weekday() == 5:
+            new_date = new_date + timedelta(days=2)
+            not_valid = check_for_holiday(new_date)
+            continue
+        elif new_date.weekday() == 6:
+            new_date = new_date + timedelta(days=1)
+            not_valid = check_for_holiday(new_date)
+            continue
+        else:
+            not_valid = check_for_holiday(new_date)
+            if not_valid:
+                new_date = new_date + timedelta(days=1)
+            continue
+
+    return new_date
+
+
 def create_notion_date_start(start):
     notion_date = NotionDate(start)
     return notion_date
 
 
 def create_notion_dates_start_end_submitted(start, active_day, last_working_day):
-    end = start + timedelta(days=last_working_day-active_day)
-    assignment_submitted_date = end + timedelta(days=1)
-    assignment_start_end = NotionDate(start, end=end)
+    # TODO: Add weekend and holiday validation logic for last working day and date submitted
+    end = start + timedelta(days=last_working_day - active_day)
+    validated_end = validate_date(end)
+    assignment_submitted_date = validated_end + timedelta(days=1)
+    assignment_start_end = NotionDate(start, end=validated_end)
     assignment_submitted = NotionDate(assignment_submitted_date)
     all_date_objects = [assignment_start_end, assignment_submitted]
     return all_date_objects
