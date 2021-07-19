@@ -14,4 +14,4 @@ Change Active Student Stand Up Status (per class)
 New Class Notion Admin
 """
 # classschedules.add_dates_to_schedule()
-# activestudents.add_new_class_to_activestudents()
+activestudents.add_new_class_to_activestudents()

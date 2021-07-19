@@ -1,5 +1,5 @@
-from config import settings
 from utilities import user_interface
+from config import settings
 
 import pandas
 
@@ -11,7 +11,12 @@ https://devcodecamp-my.sharepoint.com/:x:/p/carrie/EY3vGDJt73FKsqfdc8GIqvgBJtp-D
 
 
 def get_active_students_collection():
-    return settings.client.get_collection_view("https://www.notion.so/44aa227ba66f4174b06c0f5a1ddbdb5e?v=26ea1860a39f4aaa9d7b35ceee7e0691")
+    try:
+        collection = settings.client.get_collection_view(
+            "https://www.notion.so/44aa227ba66f4174b06c0f5a1ddbdb5e?v=26ea1860a39f4aaa9d7b35ceee7e0691")
+        return collection
+    except AssertionError as error:
+        print(error)
 
 
 def change_standup_status_notstarted(course_type):
@@ -26,7 +31,13 @@ def change_standup_status_notstarted(course_type):
             row.standup_status = "Not Started"
 
 
-# TODO: Add error handling for empty fields in CSV file
+def deblank_student_values(students_list):
+    for item in students_list:
+        for key in item:
+            if pandas.isna(item[key]):  # uses pandas to check if nan (empty value)
+                item[key] = 'N/A'
+
+
 def add_new_class_to_activestudents():
     # Uses pandas to parse CSV from Admissions into Python data structure
     # Gets the cohort information for students' class
@@ -35,10 +46,17 @@ def add_new_class_to_activestudents():
     cv = get_active_students_collection()
     students = pandas.read_csv(
         r'/Users/jjvega/Desktop/Admissions to Instruction - July 26- FT.csv')
+
     students_list = students.to_dict(
         'records')  # creates a List of dictionary items containing key-value pairs representing column -> value
-    cohort = user_interface.get_cohort()
+    print(students_list)
+    # checks for blank values in any data fields and replaces with N/A - prevents breaking error
+    deblank_student_values(students_list)
+    cohort = user_interface.get_cohort()  # get name of cohort from user
+    # get Part Time or Full Time from user
     course_type = user_interface.get_course_type()
+
+    # iterate through dictionary, create a new row in Notion database with appropriate values
     for student in students_list:
         row = cv.collection.add_row()
         row.name = student["Student Name"]
