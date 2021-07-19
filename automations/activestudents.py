@@ -1,5 +1,5 @@
 from config import settings
-from utilities import datetimetools, user_interface
+from utilities import user_interface
 
 import pandas
 
@@ -37,7 +37,7 @@ def add_new_class_to_activestudents():
         r'/Users/jjvega/Desktop/Admissions to Instruction - June 28-FT.csv')
     students_list = students.to_dict(
         'records')  # creates a List of dictionary items containing key-value pairs representing column -> value
-    cohort = get_cohort()
+    cohort = user_interface.get_cohort()
     course_type = user_interface.get_course_type()
     for student in students_list:
         row = cv.collection.add_row()
@@ -48,12 +48,3 @@ def add_new_class_to_activestudents():
         row.admissions_notes = student["Admissions Notes"]
         row.cohort = cohort
         row.course = course_type[0]
-
-
-def get_cohort():
-    # takes user input to determine if cohort exists
-    # if the cohort does not exist, creates new cohort and returns to calling function
-    # helper function for adding new students to Active Students
-
-    cohort_name = input('What is the name of the cohort?')
-    return cohort_name
