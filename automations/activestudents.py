@@ -34,7 +34,7 @@ def add_new_class_to_activestudents():
 
     cv = get_active_students_collection()
     students = pandas.read_csv(
-        r'/Users/jjvega/Desktop/Admissions to Instruction - June 28-FT.csv')
+        r'/Users/jjvega/Desktop/Admissions to Instruction - July 26- FT.csv')
     students_list = students.to_dict(
         'records')  # creates a List of dictionary items containing key-value pairs representing column -> value
     cohort = user_interface.get_cohort()
