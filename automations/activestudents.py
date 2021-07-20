@@ -49,7 +49,6 @@ def add_new_class_to_activestudents():
 
     students_list = students.to_dict(
         'records')  # creates a List of dictionary items containing key-value pairs representing column -> value
-    print(students_list)
     # checks for blank values in any data fields and replaces with N/A - prevents breaking error
     deblank_student_values(students_list)
     cohort = user_interface.get_cohort()  # get name of cohort from user
