@@ -20,6 +20,7 @@ NOT DONE 4. Iterate over each row in collection
 
 
 def get_schedule_to_add_dates_to():
+    # this is the Class Schedule Template private page in my devCodeCamp workspace
     return settings.client.get_collection_view(
         'https://www.notion.so/29eb8cd9c412439f8adcf78aa0d24ea9?v=c3d0c786555f42a78124664e5d195cc5')
 
@@ -35,9 +36,11 @@ def add_dates_to_schedule():
     for row in cv.collection.get_rows():
         if row.day != active_day:
             while row.day != active_day:
-                active_date = datetimetools.add_class_day_to_date(active_date, course_type)
+                active_date = datetimetools.add_class_day_to_date(
+                    active_date, course_type)
                 active_day += 1
-            notionized_date = datetimetools.create_notion_date_start(active_date)
+            notionized_date = datetimetools.create_notion_date_start(
+                active_date)
             row.date_assigned = notionized_date
             active_day = row.day
         elif row.Type == 'Assignment' and row.last_working_day is not None and active_day != row.last_working_day:
@@ -48,5 +51,10 @@ def add_dates_to_schedule():
             row.date_assigned = add_date_objects[0]
             row.assignment_submit_date = add_date_objects[1]
         else:
-            notionized_date = datetimetools.create_notion_date_start(active_date)
+            notionized_date = datetimetools.create_notion_date_start(
+                active_date)
             row.date_assigned = notionized_date
+
+
+def test_function():
+    pass
